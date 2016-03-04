@@ -4,7 +4,8 @@
 		<title>all code info</title>
 		<meta charset="utf-8" />
 		<link href="./css/markdown.css" rel="stylesheet">
-		<!--<link href="./css/highlight/styles/monokai.css" rel="stylesheet">-->
+		<link href="./css/highlight/styles/monokai.css" rel="stylesheet">
+		<link href="./css/prettify.css" rel="stylesheet">
 	</head>
 	<body>
 		<header>
@@ -48,16 +49,21 @@
 				<div class="item-box"></div>
 			</div>
 		</div>
+		<div id="test"></div>
 		<footer>
 			<span>@allcode.info</span>
 		</footer>
 		<script src="http://cdn.bootcss.com/jquery/2.2.0/jquery.js"></script>
 		<script type="text/javascript" src="./js/Markdown.Converter.js"></script>
 		<script type="text/javascript" src="./js/highlight.js"></script>
+		<script type="text/javascript" src="./js/prettify.js"></script>  
+		<script type="text/javascript" src="./js/Markdown.Extra.js"></script>
 		<script type="text/javascript">
-			//var md = window.markdownit();
-			//var result = md.render('# markdown-it rulezz!');
 			 var converter = new Markdown.Converter();
+				Markdown.Extra.init(converter, {
+                  extensions: "all",
+                  highlighter: "prettify"
+                });
 
 			 document.write(converter.makeHtml("**I am bold!**\n# hello world"));
 			 document.write(converter.makeHtml("#hello world"));
@@ -65,11 +71,24 @@
 			 document.write(converter.makeHtml(">中文"));
 			 document.write(converter.makeHtml("```\n echo 'hello world';\n```"));
 			 document.write(converter.makeHtml("`$a=3`"));
-			$(document).ready(function() {
-  				$('pre code').each(function(i, block) {
-    				hljs.highlightBlock(block);
- 		 		});
-			});
+			 $(document).ready(function() {
+
+				$.ajax({
+					type: "POST",
+					url: "md/test.md",
+					dataType:"text",
+   					//data: "name=John&location=Boston",
+   					success: function(msg){
+						//alert( "Data Saved: " + msg );
+						$("#test").html(converter.makeHtml(msg));
+						$('pre code').each(function(i, block) {
+    						hljs.highlightBlock(block);
+ 		 				});
+
+   					}
+					
+				});
+  			});
 					
 		</script>
 	</body>
